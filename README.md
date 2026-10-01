@@ -12,13 +12,35 @@ Official implementation of **GFD-OPD**, a simple recipe for **large-to-small on-
 
 ## Overview
 
-Standard diffusion OPD breaks down when the student is smaller than the teacher: the student cannot fully match the teacher, and classifier-free guidance amplifies the remaining mismatch at sampling time, producing visible artifacts. GFD-OPD fixes this by training the student's single conditional branch on the teacher's **CFG-folded velocity** (so there is nothing left for guidance to amplify) and **extrapolating the target beyond the teacher** to push the student further.
+Standard diffusion OPD breaks down when the student is smaller than the teacher: the student cannot fully match the teacher, and classifier-free guidance amplifies the remaining mismatch at sampling time, producing visible artifacts.
+
+<p align="center">
+  <img src="assets/artifacts.png" width="100%">
+</p>
+
+*Prior large-to-small recipes (DiffusionOPD, PDM, split-KL) produce haze, desaturation and corrupted textures when distilling SD3.5-Large into SD3.5-Medium; GFD-OPD does not.*
+
+GFD-OPD fixes this by training the student's single conditional branch on the teacher's **CFG-folded velocity** (so there is nothing left for guidance to amplify) and **extrapolating the target beyond the teacher** to push the student further.
 
 <p align="center">
   <img src="assets/overview.png" width="100%">
 </p>
 
 **Results.** Distilling SD3.5-Large into SD3.5-Medium, GFD-OPD removes the artifacts of prior recipes, ranks first on all seven metrics (task rewards and image quality), surpasses the large teacher on GenEval and OCR, and overtakes all baselines within ~10 GPU-hours. The same holds for FLUX.2-9B / 32B → 4B.
+
+## Qualitative Results
+
+**SD3.5-Large → SD3.5-Medium**
+
+<p align="center">
+  <img src="assets/quality_sd35.png" width="100%">
+</p>
+
+**FLUX.2-9B / 32B → FLUX.2-4B**
+
+<p align="center">
+  <img src="assets/quality_flux.png" width="100%">
+</p>
 
 ## Roadmap
 
@@ -42,4 +64,4 @@ Standard diffusion OPD breaks down when the student is smaller than the teacher:
 
 ## Acknowledgements
 
-Built on [Flow-GRPO](https://github.com/yifan123/flow_grpo) and [Veomni](https://github.com/ByteDance-Seed/VeOmni) for the reward suite and prompt splits.
+Our codebase is built on [VeOmni](https://github.com/ByteDance-Seed/VeOmni). The reward suite and prompt splits follow [Flow-GRPO](https://github.com/yifan123/flow_grpo).
